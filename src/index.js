@@ -1,19 +1,16 @@
 import express from "express";
-import bodyParser from "body-parser";
+import { connectDB } from "./config/db.js";
+import { userRouter } from "./routes/userRoutes.js";
 
 const app = express();
 const PORT = 3001;
 
-// parse application/json
-app.use(bodyParser.json());
-const router = express.Router();
+connectDB();
 
-router.post("/", (req, res) => {
-  console.log("req.body", req.body);
-  res.send(req.body).status(200);
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/students", router);
+app.use("/api/v1/users", userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port number ${PORT}`);
